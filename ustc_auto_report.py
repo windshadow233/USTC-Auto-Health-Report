@@ -8,7 +8,7 @@ import cv2
 import time
 
 
-class USTCHealthAutoReport(object):
+class USTCAutoHealthReport(object):
     def __init__(self):
         self.sess = requests.session()
         self.url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
@@ -107,5 +107,5 @@ class USTCHealthAutoReport(object):
 
 # 调用示例
 if __name__ == '__main__':
-    crawler = USTCHealthAutoReport()
+    crawler = USTCAutoHealthReport()
     crawler.main('SAxxxxxxxx', 'password', 'post.json')
