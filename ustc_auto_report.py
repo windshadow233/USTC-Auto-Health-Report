@@ -73,10 +73,13 @@ class USTCHealthyAutoReport(object):
         return '上报成功' in response.text
 
     def main(self, username, password, post_data_file):
-        self.sess.cookies.clear()
-        token = self.login(username, password)
-        response = self.daily_report(post_data_file, token)
-        return self.check_success(response)
+        try:
+            self.sess.cookies.clear()
+            token = self.login(username, password)
+            response = self.daily_report(post_data_file, token)
+            return self.check_success(response)
+        except:
+            return False
 
 # 调用示例
 if __name__ == '__main__':
