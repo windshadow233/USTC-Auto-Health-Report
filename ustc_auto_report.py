@@ -53,7 +53,6 @@ class USTCAutoHealthReport(object):
         image = Image.fromarray(image).convert('L')
         config = '--psm 6 --oem 3 -c tessedit_char_whitelist=0123456789'
         self.number = pytesseract.image_to_string(image, config=config).strip()
-        return self.number
 
     def login(self, username, password):
         """
@@ -61,7 +60,7 @@ class USTCAutoHealthReport(object):
         """
         CAS_LT = self.get_CAS_LT()
         self.save_validate_number()
-        validate_number = self.recognize_validate_number()
+        self.recognize_validate_number()
         login_data = {
             'username': username,
             'password': password,
@@ -71,7 +70,7 @@ class USTCAutoHealthReport(object):
             'button': '',
             'model': 'uplogin.jsp',
             'service': 'https://weixine.ustc.edu.cn/2020/caslogin',
-            'LT': validate_number
+            'LT': self.number
         }
         response = self.sess.post(self.login_url, login_data)
         token = self.get_token(response)
