@@ -1,4 +1,4 @@
-# USTC-Auto-Healthy-Report
+# USTC-Auto-Health-Report
 中科大健康打卡脚本
 
 # 环境依赖
