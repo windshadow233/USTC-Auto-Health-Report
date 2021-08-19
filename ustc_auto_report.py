@@ -99,6 +99,8 @@ class USTCAutoHealthReport(object):
         """
         try:
             self.sess.cookies.clear()
+            self.number_file = ''
+            self.text = ''
             token = self.login(username, password)
             response = self.daily_report(post_data_file, token)
             return self.check_success(response)
