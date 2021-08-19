@@ -1,6 +1,8 @@
 # USTC-Auto-Health-Report
 中科大健康打卡脚本
 
+本项目仅供学习使用
+
 # 环境依赖
 
 python==3.6
