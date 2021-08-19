@@ -16,7 +16,7 @@ class USTCAutoHealthReport(object):
         self.validate_url = 'https://passport.ustc.edu.cn/validatecode.jsp?type=login'
         self.report_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
         self.number_file = ''
-        self.text = ''
+        self.number = ''
 
     def get_CAS_LT(self):
         """
@@ -52,8 +52,8 @@ class USTCAutoHealthReport(object):
         image = cv2.dilate(image, kernel, iterations=1)
         image = Image.fromarray(image).convert('L')
         config = '--psm 6 --oem 3 -c tessedit_char_whitelist=0123456789'
-        self.text = pytesseract.image_to_string(image, config=config).strip()
-        return self.text
+        self.number = pytesseract.image_to_string(image, config=config).strip()
+        return self.number
 
     def login(self, username, password):
         """
@@ -100,7 +100,7 @@ class USTCAutoHealthReport(object):
         try:
             self.sess.cookies.clear()
             self.number_file = ''
-            self.text = ''
+            self.number = ''
             token = self.login(username, password)
             response = self.daily_report(post_data_file, token)
             return self.check_success(response)
