@@ -56,7 +56,7 @@ class USTCAutoHealthReport(object):
 
     def login(self, username, password):
         """
-        登录,需要提供用户名、密码
+        登录,需要提供用户名、密码,成功后顺便找到页面的token并返回
         """
         CAS_LT = self.get_CAS_LT()
         self.save_validate_number()
