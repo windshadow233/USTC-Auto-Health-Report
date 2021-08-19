@@ -109,5 +109,5 @@ class USTCAutoHealthReport(object):
 
 # 调用示例
 if __name__ == '__main__':
-    crawler = USTCAutoHealthReport()
-    crawler.main('SAxxxxxxxx', 'password', 'post.json')
+    bot = USTCAutoHealthReport()
+    bot.main('SAxxxxxxxx', 'password', 'post.json')
