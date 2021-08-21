@@ -7,7 +7,7 @@
 
 python==3.6
 
-需要安装tesseract环境,参考版本为4.0.0-beta.1
+需要安装tesseract,参考版本为4.0.0-beta.1
 
 # 使用方法
 
