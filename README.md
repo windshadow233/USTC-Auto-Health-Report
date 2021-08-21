@@ -7,6 +7,8 @@
 
 python==3.6
 
+见requirements.txt
+
 需要安装tesseract,参考版本为4.0.0-beta.1
 
 # 使用方法
