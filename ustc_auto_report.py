@@ -71,20 +71,23 @@ class USTCHealthAutoReport(object):
         CAS_LT = self.get_CAS_LT()
         self.save_validate_number()
         validate_number = self.recognize_validate_number()
-        login_data = {
-            'username': username,
-            'password': password,
-            'warn': '',
-            'CAS_LT': CAS_LT,
-            'showCode': '1',
-            'button': '',
-            'model': 'uplogin.jsp',
-            'service': 'https://weixine.ustc.edu.cn/2020/caslogin',
-            'LT': validate_number
-        }
-        response = self.sess.post(self.login_url, login_data)
-        token = self.get_token(response)
-        return token
+        try:
+            login_data = {
+                'username': username,
+                'password': password,
+                'warn': '',
+                'CAS_LT': CAS_LT,
+                'showCode': '1',
+                'button': '',
+                'model': 'uplogin.jsp',
+                'service': 'https://weixine.ustc.edu.cn/2020/caslogin',
+                'LT': validate_number
+            }
+            response = self.sess.post(self.login_url, login_data)
+            token = self.get_token(response)
+            return token
+        except:
+            return 0
 
     def daily_report(self, post_data_file, token):
         """
