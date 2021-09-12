@@ -68,10 +68,10 @@ class USTCHealthAutoReport(object):
         self.sess.cookies.clear()
         self.number_file = ''
         self.number = ''
-        CAS_LT = self._get_CAS_LT()
-        self._save_validate_number()
-        validate_number = self._recognize_validate_number()
         try:
+            CAS_LT = self._get_CAS_LT()
+            self._save_validate_number()
+            validate_number = self._recognize_validate_number()
             login_data = {
                 'username': username,
                 'password': password,
