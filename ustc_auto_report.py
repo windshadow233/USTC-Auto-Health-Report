@@ -6,15 +6,21 @@ from PIL import Image
 import numpy as np
 import cv2
 import time
+import datetime
 
 
-class USTCAutoHealthReport(object):
+class USTCHealthAutoReport(object):
     def __init__(self):
         self.sess = requests.session()
         self.url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
+        # 登录url
         self.login_url = 'https://passport.ustc.edu.cn/login'
+        # 验证码url
         self.validate_url = 'https://passport.ustc.edu.cn/validatecode.jsp?type=login'
+        # 打卡url
         self.report_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
+        # 报备url
+        self.post_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
         self.number_file = ''
         self.number = ''
 
@@ -53,14 +59,18 @@ class USTCAutoHealthReport(object):
         image = Image.fromarray(image).convert('L')
         config = '--psm 6 --oem 3 -c tessedit_char_whitelist=0123456789'
         self.number = pytesseract.image_to_string(image, config=config).strip()
+        return self.number
 
     def login(self, username, password):
         """
-        登录,需要提供用户名、密码,成功后顺便找到页面的token并返回
+        登录,需要提供用户名、密码，顺便返回后续表单需要提供的token
         """
+        self.sess.cookies.clear()
+        self.number_file = ''
+        self.number = ''
         CAS_LT = self.get_CAS_LT()
         self.save_validate_number()
-        self.recognize_validate_number()
+        validate_number = self.recognize_validate_number()
         login_data = {
             'username': username,
             'password': password,
@@ -70,7 +80,7 @@ class USTCAutoHealthReport(object):
             'button': '',
             'model': 'uplogin.jsp',
             'service': 'https://weixine.ustc.edu.cn/2020/caslogin',
-            'LT': self.number
+            'LT': validate_number
         }
         response = self.sess.post(self.login_url, login_data)
         token = self.get_token(response)
@@ -78,7 +88,7 @@ class USTCAutoHealthReport(object):
 
     def daily_report(self, post_data_file, token):
         """
-        登录成功后，提交表单
+        提交打卡表单
         """
         with open(post_data_file, 'r') as f:
             post_data = json.loads(f.read())
@@ -88,25 +98,46 @@ class USTCAutoHealthReport(object):
 
     def check_success(self, response):
         """
-        简单check一下有没有成功打上卡
+        简单check一下有没有成功打卡、报备
         """
-        return '上报成功' in response.text
+        return '成功' in response.text
 
-    def main(self, username, password, post_data_file):
+    def report(self, token, post_data_file):
         """
-        主函数，需要提供用户名、密码以及包含表单内容的json文件
+        打卡函数，需要提供token(调用login方法获取)和包含表单内容的json文件
         """
         try:
-            self.sess.cookies.clear()
-            self.number_file = ''
-            self.number = ''
-            token = self.login(username, password)
             response = self.daily_report(post_data_file, token)
             return self.check_success(response)
         except:
             return False
 
+    def post(self, token):
+        """
+        报备函数，需要提供token(调用login方法获取)
+        """
+        try:
+            start_date = datetime.datetime.now()
+            date_delta = datetime.timedelta(days=6)
+            end_date = start_date + date_delta
+            data = {
+                "start_date": start_date.strftime("%Y-%m-%d"),
+                "end_date": end_date.strftime("%Y-%m-%d"),
+                "_token": token
+            }
+            response = self.sess.post(self.post_url, data=data)
+            if not self.check_success(response):
+                if '请不要在有效期内重复报备' in response.text:
+                    return -1
+                return 0
+            return 1
+        except:
+            return 0
+
+
 # 调用示例
-if __name__ == '__main__':
-    bot = USTCAutoHealthReport()
-    bot.main('SAxxxxxxxx', 'password', 'post.json')
+if __name__ == "__main__":
+    bot = USTCHealthAutoReport()
+    token = bot.login('SAxxxxxxxx', 'password')
+    report_success = bot.report(token, 'post.json')
+    post_success = bot.post(token)
