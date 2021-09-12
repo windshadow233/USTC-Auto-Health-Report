@@ -138,7 +138,7 @@ class USTCHealthAutoReport(object):
             return 0
 
 
-# 打卡示例
+# 调用示例
 if __name__ == "__main__":
     bot = USTCHealthAutoReport()
     token = bot.login('SAxxxxxxxx', 'password')
