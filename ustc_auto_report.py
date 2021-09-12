@@ -24,7 +24,7 @@ class USTCHealthAutoReport(object):
         self.number_file = ''
         self.number = ''
 
-    def get_CAS_LT(self):
+    def _get_CAS_LT(self):
         """
         获取登录时需要提供的验证字段
         """
@@ -32,7 +32,7 @@ class USTCHealthAutoReport(object):
         CAS_LT = BeautifulSoup(response.text, 'lxml').find(attrs={'id': 'CAS_LT'}).get('value')
         return CAS_LT
 
-    def get_token(self, response):
+    def _get_token(self, response):
         """
         获取打卡时需要提供的验证字段
         """
@@ -40,7 +40,7 @@ class USTCHealthAutoReport(object):
         token = s.find(attrs={'name': '_token'}).get('value')
         return token
 
-    def save_validate_number(self):
+    def _save_validate_number(self):
         """
         将验证码图片保存到一个文件
         """
@@ -49,7 +49,7 @@ class USTCHealthAutoReport(object):
         with open('/tmp/' + self.number_file, 'wb') as f:
             f.write(validate_number.content)
 
-    def recognize_validate_number(self):
+    def _recognize_validate_number(self):
         """
         识别验证码
         """
@@ -68,9 +68,9 @@ class USTCHealthAutoReport(object):
         self.sess.cookies.clear()
         self.number_file = ''
         self.number = ''
-        CAS_LT = self.get_CAS_LT()
-        self.save_validate_number()
-        validate_number = self.recognize_validate_number()
+        CAS_LT = self._get_CAS_LT()
+        self._save_validate_number()
+        validate_number = self._recognize_validate_number()
         try:
             login_data = {
                 'username': username,
@@ -84,12 +84,12 @@ class USTCHealthAutoReport(object):
                 'LT': validate_number
             }
             response = self.sess.post(self.login_url, login_data)
-            token = self.get_token(response)
+            token = self._get_token(response)
             return token
         except:
             return 0
 
-    def daily_report(self, post_data_file, token):
+    def _daily_report(self, post_data_file, token):
         """
         提交打卡表单
         """
@@ -99,7 +99,7 @@ class USTCHealthAutoReport(object):
         response = self.sess.post(self.report_url, data=post_data)
         return response
 
-    def check_success(self, response):
+    def _check_success(self, response):
         """
         简单check一下有没有成功打卡、报备
         """
@@ -110,8 +110,8 @@ class USTCHealthAutoReport(object):
         打卡函数，需要提供token(调用login方法获取)和包含表单内容的json文件
         """
         try:
-            response = self.daily_report(post_data_file, token)
-            return self.check_success(response)
+            response = self._daily_report(post_data_file, token)
+            return self._check_success(response)
         except:
             return False
 
@@ -129,18 +129,10 @@ class USTCHealthAutoReport(object):
                 "_token": token
             }
             response = self.sess.post(self.post_url, data=data)
-            if not self.check_success(response):
+            if not self._check_success(response):
                 if '请不要在有效期内重复报备' in response.text:
                     return -1
                 return 0
             return 1
         except:
             return 0
-
-
-# 调用示例
-if __name__ == "__main__":
-    bot = USTCHealthAutoReport()
-    token = bot.login('SAxxxxxxxx', 'password')
-    report_success = bot.report(token, 'post.json')
-    post_success = bot.post(token)
