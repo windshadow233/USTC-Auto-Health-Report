@@ -61,6 +61,12 @@ class USTCAutoHealthReport(object):
         self.number = pytesseract.image_to_string(image, config=config).strip()
         return self.number
 
+    def _check_success(self, response):
+        """
+        简单check一下有没有成功打卡、报备
+        """
+        return '成功' in response.text
+
     def login(self, username, password):
         """
         登录,需要提供用户名、密码，顺便返回后续表单需要提供的token
@@ -89,33 +95,20 @@ class USTCAutoHealthReport(object):
         except:
             return 0
 
-    def _daily_report(self, post_data_file, token):
-        """
-        提交打卡表单
-        """
-        with open(post_data_file, 'r') as f:
-            post_data = json.loads(f.read())
-        post_data['_token'] = token
-        response = self.sess.post(self.report_url, data=post_data)
-        return response
-
-    def _check_success(self, response):
-        """
-        简单check一下有没有成功打卡、报备
-        """
-        return '成功' in response.text
-
-    def report(self, token, post_data_file):
+    def daily_report(self, post_data_file, token):
         """
         打卡函数，需要提供token(调用login方法获取)和包含表单内容的json文件
         """
+        with open(post_data_file, 'r') as f:
+            post_data = json.loads(f.read())
         try:
-            response = self._daily_report(post_data_file, token)
+            post_data['_token'] = token
+            response = self.sess.post(self.report_url, data=post_data)
             return self._check_success(response)
         except:
             return False
 
-    def post(self, token):
+    def weekly_post(self, token):
         """
         报备函数，需要提供token(调用login方法获取)
         """
