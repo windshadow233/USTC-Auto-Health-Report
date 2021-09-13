@@ -95,7 +95,7 @@ class USTCAutoHealthReport(object):
         except:
             return 0
 
-    def daily_clock_in(self, post_data_file, token):
+    def daily_clock_in(self, token, post_data_file):
         """
         打卡函数，需要提供token(调用login方法获取)和包含表单内容的json文件
         """
