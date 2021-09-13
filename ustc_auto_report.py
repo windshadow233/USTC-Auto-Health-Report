@@ -136,13 +136,3 @@ class USTCAutoHealthReport(object):
             return 1
         except:
             return 0
-
-
-# 调用示例
-if __name__ == "__main__":
-    bot = USTCAutoHealthReport()
-    token = bot.login('SAxxxxxxxx', 'password')
-    # 打卡
-    report_success = bot.report(token, 'post.json')
-    # 报备
-    post_success = bot.post(token)
