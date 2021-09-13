@@ -18,9 +18,9 @@ class USTCAutoHealthReport(object):
         # 验证码url
         self.validate_url = 'https://passport.ustc.edu.cn/validatecode.jsp?type=login'
         # 打卡url
-        self.report_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
+        self.clock_in_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
         # 报备url
-        self.post_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
+        self.report_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
         self.number_file = ''
         self.number = ''
 
@@ -104,7 +104,7 @@ class USTCAutoHealthReport(object):
             with open(post_data_file, 'r') as f:
                 post_data = json.loads(f.read())
             post_data['_token'] = token
-            response = self.sess.post(self.report_url, data=post_data)
+            response = self.sess.post(self.clock_in_url, data=post_data)
             return self._check_success(response)
         except:
             return False
@@ -123,7 +123,7 @@ class USTCAutoHealthReport(object):
                 "end_date": end_date.strftime("%Y-%m-%d"),
                 "_token": token
             }
-            response = self.sess.post(self.post_url, data=data)
+            response = self.sess.post(self.report_url, data=data)
             if not self._check_success(response):
                 if '请不要在有效期内重复报备' in response.text:
                     return -1
