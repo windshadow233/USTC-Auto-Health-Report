@@ -21,9 +21,13 @@ python==3.6
 
 调用示例:
 ```python
+from ustc_auto_report import USTCAutoHealthReport
+
 bot = USTCAutoHealthReport()
+# 登录
 token = bot.login('SAxxxxxxxx', 'password')
 # 打卡
 report_success = bot.report(token, 'post.json')
 # 报备
 post_success = bot.post(token)
+```
