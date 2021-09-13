@@ -19,4 +19,11 @@ python==3.6
 
 健康打卡每天调用一次；出校报备每周仅需调用一次，时效为7天。
 
-调用示例见ustc_auto_report.py
+调用示例:
+```python
+bot = USTCAutoHealthReport()
+token = bot.login('SAxxxxxxxx', 'password')
+# 打卡
+report_success = bot.report(token, 'post.json')
+# 报备
+post_success = bot.post(token)
