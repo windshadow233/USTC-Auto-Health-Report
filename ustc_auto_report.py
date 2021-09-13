@@ -9,7 +9,7 @@ import time
 import datetime
 
 
-class USTCHealthAutoReport(object):
+class USTCAutoHealthReport(object):
     def __init__(self):
         self.sess = requests.session()
         self.url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
@@ -140,7 +140,7 @@ class USTCHealthAutoReport(object):
 
 # 调用示例
 if __name__ == "__main__":
-    bot = USTCHealthAutoReport()
+    bot = USTCAutoHealthReport()
     token = bot.login('SAxxxxxxxx', 'password')
     # 打卡
     report_success = bot.report(token, 'post.json')
