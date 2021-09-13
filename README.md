@@ -29,5 +29,5 @@ token = bot.login('SAxxxxxxxx', 'password')
 # 打卡
 report_success = bot.daily_clock_in(token, 'post.json')
 # 报备
-post_success = bot.weekly_post(token)
+post_success = bot.weekly_report(token)
 ```
