@@ -98,6 +98,7 @@ class USTCAutoHealthReport(object):
     def daily_clock_in(self, token, post_data_file):
         """
         打卡函数，需要提供token(调用login方法获取)和包含表单内容的json文件
+        打卡成功返回True，打卡失败返回False
         """
         with open(post_data_file, 'r') as f:
             post_data = json.loads(f.read())
@@ -111,6 +112,7 @@ class USTCAutoHealthReport(object):
     def weekly_report(self, token):
         """
         报备函数，需要提供token(调用login方法获取)
+        报备成功返回1，七天内重复报备返回-1，因其他原因报备失败返回0
         """
         try:
             start_date = datetime.datetime.now()
