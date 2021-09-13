@@ -100,9 +100,9 @@ class USTCAutoHealthReport(object):
         打卡函数，需要提供token(调用login方法获取)和包含表单内容的json文件
         打卡成功返回True，打卡失败返回False
         """
-        with open(post_data_file, 'r') as f:
-            post_data = json.loads(f.read())
         try:
+            with open(post_data_file, 'r') as f:
+                post_data = json.loads(f.read())
             post_data['_token'] = token
             response = self.sess.post(self.report_url, data=post_data)
             return self._check_success(response)
