@@ -81,6 +81,7 @@ class USTCAutoHealthReport(object):
         self.sess.cookies.clear()
         self.LT_file = ''
         self.LT = ''
+        self.token = ''
         try:
             CAS_LT = self._get_CAS_LT()
             self._save_validate_number()
