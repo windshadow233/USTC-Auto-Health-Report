@@ -25,9 +25,9 @@ from ustc_auto_report import USTCAutoHealthReport
 
 bot = USTCAutoHealthReport()
 # 登录
-token = bot.login('SAxxxxxxxx', 'password')
+login_success = bot.login('SAxxxxxxxx', 'password')
 # 打卡
-report_success = bot.daily_clock_in(token, 'post.json')
+report_success = bot.daily_clock_in('post.json')
 # 报备
-post_success = bot.weekly_report(token)
+post_success = bot.weekly_report()
 ```
