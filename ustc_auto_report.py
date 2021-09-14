@@ -28,6 +28,8 @@ class USTCAutoHealthReport(object):
         self.LT_file = ''
         # 验证码识别结果
         self.LT = ''
+        # 身份认证token
+        self.token = ''
 
     def _get_CAS_LT(self):
         """
@@ -74,7 +76,7 @@ class USTCAutoHealthReport(object):
 
     def login(self, username, password):
         """
-        登录,需要提供用户名、密码，顺便返回后续表单需要提供的token
+        登录,需要提供用户名、密码，记录下token
         """
         self.sess.cookies.clear()
         self.LT_file = ''
@@ -96,27 +98,28 @@ class USTCAutoHealthReport(object):
             }
             response = self.sess.post(self.login_url, login_data)
             token = self._get_token(response)
-            return token
+            self.token = token
+            return True
         except:
-            return 0
+            return False
 
-    def daily_clock_in(self, token, post_data_file):
+    def daily_clock_in(self, post_data_file):
         """
-        打卡函数，需要提供token(调用login方法获取)和包含表单内容的json文件
+        打卡函数，需要提供包含表单内容的json文件
         打卡成功返回True，打卡失败返回False
         """
         try:
             with open(post_data_file, 'r') as f:
                 post_data = json.loads(f.read())
-            post_data['_token'] = token
+            post_data['_token'] = self.token
             response = self.sess.post(self.clock_in_url, data=post_data)
             return self._check_success(response)
         except:
             return False
 
-    def weekly_report(self, token):
+    def weekly_report(self):
         """
-        报备函数，需要提供token(调用login方法获取)
+        报备函数
         报备成功返回1，七天内重复报备返回-1，因其他原因报备失败返回0
         """
         try:
@@ -126,7 +129,7 @@ class USTCAutoHealthReport(object):
             data = {
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": end_date.strftime("%Y-%m-%d"),
-                "_token": token
+                "_token": self.token
             }
             response = self.sess.post(self.report_url, data=data)
             if not self._check_success(response):
