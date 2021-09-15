@@ -71,7 +71,7 @@ class USTCPassportLogin(object):
                 'service': '',
                 'LT': self.LT
             }
-            response = self.sess.post(self.passport, login_data)
-            return username in response.text
+            self.sess.post(self.passport, login_data)
+            return self.sess.cookies.get("uc") == username
         except:
             return False
