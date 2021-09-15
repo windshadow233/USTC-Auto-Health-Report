@@ -10,7 +10,7 @@ class USTCAutoHealthReport(object):
         # 用于登录
         self.login_bot = USTCPassportLogin()
         self.sess = self.login_bot.sess
-        self.url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
+        self.url = 'https://weixine.ustc.edu.cn/2020'
         # 登录url
         self.login_url = 'https://passport.ustc.edu.cn/login'
         # 验证码url
