@@ -10,7 +10,7 @@ class USTCAutoHealthReport(object):
         # 用于登录
         self.login_bot = USTCPassportLogin()
         self.sess = self.login_bot.sess
-        self.url = 'https://weixine.ustc.edu.cn/2020'
+        self.url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
         # 打卡url
         self.clock_in_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
         # 报备url
@@ -39,7 +39,8 @@ class USTCAutoHealthReport(object):
         """
         self.token = ''
         is_success = self.login_bot.login(username, password)
-        self.token = self._get_token()
+        if is_success:
+            self.token = self._get_token()
         return is_success
 
     def daily_clock_in(self, post_data_file):
