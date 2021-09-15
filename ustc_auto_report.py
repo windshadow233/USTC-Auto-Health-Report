@@ -64,8 +64,7 @@ class USTCAutoHealthReport(object):
         """
         try:
             start_date = datetime.datetime.now()
-            date_delta = datetime.timedelta(days=6)
-            end_date = start_date + date_delta
+            end_date = start_date + datetime.timedelta(days=6)
             data = {
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": end_date.strftime("%Y-%m-%d"),
