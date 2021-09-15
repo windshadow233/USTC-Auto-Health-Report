@@ -2,7 +2,7 @@ import json
 from bs4 import BeautifulSoup
 import datetime
 
-from .ustc_passport_login import USTCPassportLogin
+from ustc_passport_login import USTCPassportLogin
 
 
 class USTCAutoHealthReport(object):
