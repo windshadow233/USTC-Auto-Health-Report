@@ -22,8 +22,8 @@ class USTCPassportLogin(object):
 
     def _get_cas_lt(self):
         """
-           获取登录时需要提供的验证字段
-           """
+        获取登录时需要提供的验证字段
+        """
         response = self.sess.get(self.passport)
         CAS_LT = BeautifulSoup(response.text, 'lxml').find(attrs={'id': 'CAS_LT'}).get('value')
         return CAS_LT
@@ -51,7 +51,7 @@ class USTCPassportLogin(object):
 
     def login(self, username, password):
         """
-        登录,需要提供用户名、密码，记录下token
+        登录,需要提供用户名、密码
         """
         self.sess.cookies.clear()
         self.LT_file = ''
@@ -72,6 +72,6 @@ class USTCPassportLogin(object):
                 'LT': self.LT
             }
             response = self.sess.post(self.passport, login_data)
-            return response
+            return username in response.text
         except:
             return False
