@@ -11,10 +11,6 @@ class USTCAutoHealthReport(object):
         self.login_bot = USTCPassportLogin()
         self.sess = self.login_bot.sess
         self.url = 'https://weixine.ustc.edu.cn/2020'
-        # 登录url
-        self.login_url = 'https://passport.ustc.edu.cn/login'
-        # 验证码url
-        self.validate_url = 'https://passport.ustc.edu.cn/validatecode.jsp?type=login'
         # 打卡url
         self.clock_in_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
         # 报备url
