@@ -11,7 +11,7 @@ class USTCAutoHealthReport(object):
         self.login_bot = USTCPassportLogin()
         self.sess = self.login_bot.sess
         # CAS身份认证url
-        self.url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
+        self.cas_url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
         # 打卡url
         self.clock_in_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
         # 报备url
@@ -23,7 +23,7 @@ class USTCAutoHealthReport(object):
         """
         获取打卡时需要提供的验证字段
         """
-        response = self.sess.get(self.url)
+        response = self.sess.get(self.cas_url)
         s = BeautifulSoup(response.text, 'lxml')
         token = s.find(attrs={'name': '_token'}).get('value')
         return token
