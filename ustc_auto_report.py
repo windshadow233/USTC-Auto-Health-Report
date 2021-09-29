@@ -55,7 +55,8 @@ class USTCAutoHealthReport(object):
             post_data['_token'] = self.token
             response = self.sess.post(self.clock_in_url, data=post_data)
             return self._check_success(response)
-        except:
+        except Exception as e:
+            print(e)
             return False
 
     def weekly_report(self):
@@ -77,5 +78,6 @@ class USTCAutoHealthReport(object):
                     return -1
                 return 0
             return 1
-        except:
+        except Exception as e:
+            print(e)
             return 0
