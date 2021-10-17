@@ -30,7 +30,7 @@ class USTCPassportLogin(object):
                 'showCode': '',
                 'button': '',
                 'model': 'uplogin.jsp',
-                'service': '',
+                'service': ''
             }
             self.sess.post(self.passport, login_data, allow_redirects=False)
             return self.sess.cookies.get("uc") == username
