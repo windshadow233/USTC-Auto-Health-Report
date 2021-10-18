@@ -1,4 +1,8 @@
 # USTC-Auto-Health-Report
+
+![GitHub](https://img.shields.io/github/license/windshadow233/USTC-Auto-Health-Report?style=plastic)
+![Python](https://img.shields.io/badge/Language-Python-blueviolet?style=plastic)
+
 ## 中科大健康打卡脚本
 
 - [x] 统一身份认证登录
