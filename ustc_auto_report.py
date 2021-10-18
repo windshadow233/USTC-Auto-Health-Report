@@ -74,7 +74,7 @@ class USTCAutoHealthReport(object):
             }
             response = self.sess.post(self.report_url, data=data)
             if not self._check_success(response):
-                if '请不要在有效期内重复报备' in response.text:
+                if '你当前处于“在校已出校报备”状态' in response.text:
                     return -1
                 return 0
             return 1
