@@ -40,9 +40,9 @@ python==3.6
 
 示例见apply.json。
 
-目前似乎可以任意修改申请的天数...
+目前似乎可以在5天以内任意修改申请的天数...
 
-每n天调用一次， n自定。
+每n天调用一次， n≤5。
 
 ## 调用示例:
 ```python
@@ -56,5 +56,5 @@ bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
 # 进出校申请
-bot.daily_stayinout_apply('apply.json', days=6)
+bot.daily_stayinout_apply('apply.json', days=5)
 ```
