@@ -84,7 +84,7 @@ class USTCAutoHealthReport(object):
             print(e)
             return 0
 
-    def daily_stayinout_apply(self, apply_data_file, days=5):
+    def stayinout_apply(self, apply_data_file, days=5):
         """
         2022年3月18日起每日进出校申请
         需要提供包含表单内容的json文件
