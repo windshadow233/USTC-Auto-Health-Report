@@ -11,6 +11,7 @@
     
 - [x] 健康打卡
 - [x] 出校报备
+- [x] 每日进出校申请
 
 本项目仅供学习使用
 
@@ -22,11 +23,26 @@ python==3.6
 
 # 使用方法
 
+## 每日打卡
 手动打卡并抓包，将除_token外的其他内容以JSON格式放置于post.json文件中，即可结合各类定时程序，调用脚本进行打卡。
 
-健康打卡每天调用一次；出校报备每周仅需调用一次，时效为7天。
+示例见post.json。
 
-调用示例:
+每天调用一次。
+
+## 出校报备
+
+每周仅需调用一次，时效为7天。（目前该功能暂时不可用，替换为下面的进出校申请）
+
+## 进出校申请
+
+手动进行申请并抓包，将除token_、时间以外的字段放置于apply.json文件中，即可结合各类定时程序，调用脚本进行进出校申请。
+
+示例见apply.json。
+
+每天调用一次。
+
+## 调用示例:
 ```python
 from ustc_auto_report import USTCAutoHealthReport
 
@@ -37,4 +53,6 @@ bot.login('SAxxxxxxxx', 'password')
 bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
+# 进出校申请
+bot.daily_stayinout_apply('apply.json')
 ```
