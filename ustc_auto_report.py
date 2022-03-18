@@ -84,11 +84,10 @@ class USTCAutoHealthReport(object):
             print(e)
             return 0
 
-    def stayinout_apply(self, t="23", days=5):
+    def stayinout_apply(self, t="23"):
         """
         2022年3月18日起每日进出校申请
         :param t:  进入报备表单页面时浏览器搜索框内的参数t
-        发现目前可以任意修改申请的天数: days
         申请成功返回True,申请失败返回False
         """
         try:
@@ -97,7 +96,7 @@ class USTCAutoHealthReport(object):
             post_data['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
             post_data['end_date'] = (datetime.datetime(year=now.year, month=now.month, day=now.day,
                                                        hour=23, minute=59, second=59) + datetime.timedelta(
-                days=days)).strftime('%Y-%m-%d %H:%M:%S')
+                days=1)).strftime('%Y-%m-%d %H:%M:%S')
             response = self.sess.post(self.stayinout_apply_url, data=post_data)
             return self._check_success(response)
         except Exception as e:
