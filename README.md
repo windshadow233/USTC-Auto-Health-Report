@@ -11,7 +11,7 @@
     
 - [x] 健康打卡
 - [x] 出校报备
-- [x] 每日进出校申请
+- [x] 进出校申请
 
 本项目仅供学习使用
 
@@ -56,5 +56,5 @@ bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
 # 进出校申请
-bot.daily_stayinout_apply('apply.json', days=5)
+bot.stayinout_apply('apply.json', days=5)
 ```
