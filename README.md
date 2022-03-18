@@ -38,9 +38,7 @@ python==3.6
 
 手动进行申请，拿到申请页面URL中的参数t，即可结合各类定时程序，调用脚本进行进出校申请。
 
-目前似乎可以在5天以内任意修改申请的天数...
-
-每n天调用一次， n≤6。
+每2天调用一次。
 
 ## 调用示例:
 ```python
@@ -54,5 +52,5 @@ bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
 # 进出校申请
-bot.stayinout_apply(t="23", days=5)
+bot.stayinout_apply(t="23")
 ```
