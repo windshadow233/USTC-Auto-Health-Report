@@ -17,7 +17,7 @@ class USTCAutoHealthReport(object):
         # 每周报备url
         self.report_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
         # 每日进出校申请url
-        self.stayinout_apply_url = 'https://weixine.ustc.edu.cn/2020/stayinout_apply'
+        self.stayinout_apply_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
         # 身份认证token
         self.token = ''
 
@@ -84,17 +84,15 @@ class USTCAutoHealthReport(object):
             print(e)
             return 0
 
-    def stayinout_apply(self, apply_data_file, days=5):
+    def stayinout_apply(self, t="23", days=5):
         """
         2022年3月18日起每日进出校申请
-        需要提供包含表单内容的json文件
+        :param t:  进入报备表单页面时浏览器搜索框内的参数t
         发现目前可以任意修改申请的天数: days
         申请成功返回True,申请失败返回False
         """
         try:
-            with open(apply_data_file, 'r') as f:
-                post_data = json.loads(f.read())
-            post_data['_token'] = self.token
+            post_data = {"t": t, '_token': self.token}
             now = datetime.datetime.now()
             post_data['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
             post_data['end_date'] = (datetime.datetime(year=now.year, month=now.month, day=now.day,
