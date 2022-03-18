@@ -56,5 +56,5 @@ bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
 # 进出校申请
-bot.daily_stayinout_apply('apply.json')
+bot.daily_stayinout_apply('apply.json', days=6)
 ```
