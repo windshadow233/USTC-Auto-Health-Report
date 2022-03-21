@@ -36,9 +36,11 @@ python==3.6
 
 ## 进出校申请
 
-手动进行申请，拿到申请页面URL中的参数t，即可结合各类定时程序，调用脚本进行进出校申请。
+手动进行申请并抓包，将除_token、时间参数以外的内容以JSON格式放置于apply.json文件中，即可结合各类定时程序，调用脚本进行进出校申请。
 
-每2天调用一次。
+若有多个相同参数，请以list数据类型存放。
+
+每天或每2天调用一次。
 
 ## 调用示例:
 ```python
@@ -52,5 +54,5 @@ bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
 # 进出校申请
-bot.stayinout_apply(t="23")
+bot.stayinout_apply('apply.json')
 ```
