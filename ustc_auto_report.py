@@ -84,23 +84,19 @@ class USTCAutoHealthReport(object):
             print(e)
             return 0
 
-    def stayinout_apply(self, apply_data_file, days=1):
+    def stayinout_apply(self, apply_data_file):
         """
         2022年3月18日起每日进出校申请
         申请成功返回True,申请失败返回False
         :param apply_data_file表单数据文件
-        :param days 申请天数, 0或1
         """
         try:
-            assert days in [0, 1]
             with open(apply_data_file, 'r') as f:
                 post_data = json.loads(f.read())
             now = datetime.datetime.now()
             post_data['_token'] = self.token
             post_data['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
-            post_data['end_date'] = (datetime.datetime(year=now.year, month=now.month, day=now.day,
-                                                       hour=23, minute=59, second=59) + datetime.timedelta(
-                days=days)).strftime('%Y-%m-%d %H:%M:%S')
+            post_data['end_date'] = now.strftime("%Y-%m-%d 23:59:59")
             response = self.sess.post(self.stayinout_apply_url, data=post_data)
             return self._check_success(response)
         except Exception as e:
