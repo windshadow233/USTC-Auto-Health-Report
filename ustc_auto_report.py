@@ -16,8 +16,13 @@ class USTCAutoHealthReport(object):
         self.clock_in_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
         # 每周报备url
         self.report_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
-        # 每日进出校申请url
-        self.stayinout_apply_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
+        # 每日进出校申请url,
+        # 支持t=2、3、4的情况
+        self.stayinout_apply_url = {
+            '2': 'https://weixine.ustc.edu.cn/2020/stayinout_apply',
+            '3': 'https://weixine.ustc.edu.cn/2020/apply/daliy/post',
+            '4': 'https://weixine.ustc.edu.cn/2020/stayinout_apply'
+        }
         # 身份认证token
         self.token = ''
 
@@ -84,11 +89,15 @@ class USTCAutoHealthReport(object):
             print(e)
             return 0
 
-    def stayinout_apply(self, apply_data_file):
+    def stayinout_apply(self, apply_data_file, t='3'):
         """
         2022年3月18日起每日进出校申请
         申请成功返回True,申请失败返回False
         :param apply_data_file表单数据文件
+        :param t
+          前往合肥市包河、庐阳、蜀山、瑶海区范围内校外：t=2
+          前往东西南北中校区：t=3
+          前往高新校区、先研院、国金院：t=4
         """
         try:
             with open(apply_data_file, 'r') as f:
@@ -97,7 +106,7 @@ class USTCAutoHealthReport(object):
             post_data['_token'] = self.token
             post_data['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
             post_data['end_date'] = now.strftime("%Y-%m-%d 23:59:59")
-            response = self.sess.post(self.stayinout_apply_url, data=post_data)
+            response = self.sess.post(self.stayinout_apply_url[t], data=post_data)
             return self._check_success(response)
         except Exception as e:
             print(e)
