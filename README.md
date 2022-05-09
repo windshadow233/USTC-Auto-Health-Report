@@ -40,12 +40,6 @@ python==3.6
 
 若有多个相同参数，请以list数据类型存放。
 
-函数的参数t表示申请前往的区域:
-
-- 前往合肥市包河、庐阳、蜀山、瑶海区范围内校外：t=2
-- 前往东西南北中校区：t=3
-- 前往高新校区、先研院、国金院：t=4
-
 每天调用一次。
 
 ## 调用示例:
@@ -60,5 +54,5 @@ bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
 # 进出校申请
-bot.stayinout_apply('apply.json', t="3")
+bot.stayinout_apply('apply.json')
 ```
