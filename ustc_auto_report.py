@@ -15,12 +15,12 @@ class USTCAutoHealthReport(object):
         # 打卡url
         self.clock_in_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
         # 每周报备url
-        self.report_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/post'
+        self.report_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/ipost'
         # 每日进出校申请url,
         # 支持t=2、3、4的情况
         self.stayinout_apply_url = {
             '2': 'https://weixine.ustc.edu.cn/2020/stayinout_apply',
-            '3': 'https://weixine.ustc.edu.cn/2020/apply/daliy/post',
+            '3': 'https://weixine.ustc.edu.cn/2020/apply/daliy/ipost',
             '4': 'https://weixine.ustc.edu.cn/2020/stayinout_apply'
         }
         # 身份认证token
