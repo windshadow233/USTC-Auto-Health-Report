@@ -141,6 +141,7 @@ class USTCAutoHealthReport(object):
                 status = self._upload_xing_cheng_ma(xcm)
                 if not status:
                     return False
+                time.sleep(random.randint(10, 20))
             with open(apply_data_file, 'r') as f:
                 post_data = json.loads(f.read())
             now = datetime.datetime.now()
