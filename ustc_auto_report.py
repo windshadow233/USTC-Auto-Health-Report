@@ -52,11 +52,11 @@ class USTCAutoHealthReport(object):
         dir_path = os.path.dirname(os.path.abspath(__file__))
         img_pil = Image.open(os.path.join(dir_path, "xcm/blank_xcm.jpg")).convert('RGBA')
         time_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arial.ttf"), 33)
-        mobile_number_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), 27)
         draw = ImageDraw.Draw(img_pil)
         draw.text((242, 342), time.strftime("%Y.%m.%d %H:%M:%S", time.localtime()), (0x94, 0x94, 0x9e), time_font)
-        draw.text((178, 283), f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c), mobile_number_font)
-
+        if phone_number:
+            mobile_number_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), 27)
+            draw.text((178, 283), f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c), mobile_number_font)
         arrow = Image.open(os.path.join(dir_path, "xcm/gif_green", random.choice(os.listdir(os.path.join(dir_path, "xcm/gif_green")))))
         r, g, b, a = arrow.split()
         img_pil.paste(arrow, (180, 400), mask=a)
