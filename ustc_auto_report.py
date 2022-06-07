@@ -8,7 +8,7 @@ import random
 import re
 import io
 
-from ustc_passport_login import USTCPassportLogin
+from .ustc_passport_login import USTCPassportLogin
 
 
 class USTCAutoHealthReport(object):
