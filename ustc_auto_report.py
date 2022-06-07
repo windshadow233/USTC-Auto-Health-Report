@@ -75,7 +75,7 @@ class USTCAutoHealthReport(object):
         image = output.getvalue()
         data = {"_token": "", "gid": gid, "sign": sign, "t": 1, "id": "WU_FILE_0",
                 "name": "Screenshot_Wechat.png", "type": "image/png",
-                "file": "", 'size': len(image)}
+                "size": len(image)}
         files = {'file': ("Screenshot_Wechat.png", image, "image/png", {})}
         r = self.sess.post(self.upload_image_url, data=data, files=files)
         return r.json()['status']
