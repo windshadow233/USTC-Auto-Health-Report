@@ -128,15 +128,16 @@ class USTCAutoHealthReport(object):
             print(e)
             return 0
 
-    def stayinout_apply(self, apply_data_file, phone_number=None):
+    def stayinout_apply(self, apply_data_file, upload_image=True, phone_number=None):
         """
         2022年3月18日起每日进出校申请
         申请成功返回True,申请失败返回False
         :param apply_data_file表单数据文件
-        :param phone_number手机号(用以生成行程码,若不提供则不自动上传行程码)
+        :param upload_image是否自动生成、上传行程码
+        :param phone_number手机号(用以生成行程码中的手机号,若不提供则不生成手机号)
         """
         try:
-            if phone_number is not None:
+            if upload_image:
                 xcm = self._generate_xing_cheng_ma(phone_number)
                 status = self._upload_xing_cheng_ma(xcm)
                 if not status:
