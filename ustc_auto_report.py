@@ -8,7 +8,7 @@ import random
 import re
 import io
 
-from .ustc_passport_login import USTCPassportLogin
+from ustc_passport_login import USTCPassportLogin
 
 
 class USTCAutoHealthReport(object):
@@ -48,18 +48,20 @@ class USTCAutoHealthReport(object):
         msg = s.select('.alert')[0].text
         return '成功' in msg
 
-    def _generate_xing_cheng_ma(self, phone_number):
+    def generate_xcm(self, phone_number, time_pos=(242, 342), phone_number_pos=(178, 283), display=False):
         dir_path = os.path.dirname(os.path.abspath(__file__))
         img_pil = Image.open(os.path.join(dir_path, "xcm/blank_xcm.jpg")).convert('RGBA')
         time_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arial.ttf"), 33)
         draw = ImageDraw.Draw(img_pil)
-        draw.text((242, 342), time.strftime("%Y.%m.%d %H:%M:%S", time.localtime(time.time() - random.randint(30, 60))), (0x94, 0x94, 0x9e), time_font)
+        draw.text(time_pos, time.strftime("%Y.%m.%d %H:%M:%S", time.localtime(time.time() - random.randint(30, 60))), (0x94, 0x94, 0x9e), time_font)
         if phone_number:
             mobile_number_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), 27)
-            draw.text((178, 283), f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c), mobile_number_font)
+            draw.text(phone_number_pos, f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c), mobile_number_font)
         arrow = Image.open(os.path.join(dir_path, "xcm/gif_green", random.choice(os.listdir(os.path.join(dir_path, "xcm/gif_green")))))
         r, g, b, a = arrow.split()
         img_pil.paste(arrow, (180, 400), mask=a)
+        if display:
+            img_pil.show()
         return img_pil
 
     def _get_gid_sign(self):
@@ -68,7 +70,7 @@ class USTCAutoHealthReport(object):
         sign = re.search("'sign': '(.*)'", r.text).groups()[0]
         return gid, sign
 
-    def _upload_xing_cheng_ma(self, image):
+    def upload_xcm(self, image):
         gid, sign = self._get_gid_sign()
         output = io.BytesIO()
         image.save(output, format='PNG')
@@ -138,8 +140,8 @@ class USTCAutoHealthReport(object):
         """
         try:
             if upload_image:
-                xcm = self._generate_xing_cheng_ma(phone_number)
-                status = self._upload_xing_cheng_ma(xcm)
+                xcm = self.generate_xcm(phone_number)
+                status = self.upload_xcm(xcm)
                 if not status:
                     return False
                 time.sleep(random.randint(5, 10))

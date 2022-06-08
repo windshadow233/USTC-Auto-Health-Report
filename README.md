@@ -41,9 +41,11 @@ python==3.6
 
 **注意， 行程码只是修改了时间，并非真正的行程码**
 
-**若需修改行程码图片，请自行截图，抹去时间、手机号信息并将图命名为blank_xcm.jpg置于xcm文件夹下（也可不抹去手机号，此时在调用函数时不填写手机号即可）同时，你可能需要调整_generate_xing_cheng_ma函数中的位置参数**
+**若需修改行程码图片，请自行截图，抹去时间、手机号信息并将图命名为blank_xcm.jpg置于xcm文件夹下（也可不抹去手机号，此时在调用函数时不填写手机号即可）同时，你可能需要调整generate_xcm函数中的位置参数**
 
 若有多个相同参数，请以list数据类型存放。
+
+单独调用generate_xcm函数调整位置并提前预览。
 
 每天调用一次。
 
@@ -58,6 +60,8 @@ bot.login('SAxxxxxxxx', 'password')
 bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
+# 预览生成的行程码
+bot.generate_xcm('18888888888', display=True)
 # 进出校申请
 bot.stayinout_apply('apply.json', True, '18888888888') # 填写手机号，自动生成行程码并上传
 bot.stayinout_apply('apply.json', True) # 不填手机号，只在行程码的时间位置生成时间字符串
