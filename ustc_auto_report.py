@@ -75,7 +75,7 @@ class USTCAutoHealthReport(object):
         output = io.BytesIO()
         image.save(output, format='PNG')
         image = output.getvalue()
-        data = {"_token": "", "gid": gid, "sign": sign, "t": 1, "id": "WU_FILE_0",
+        data = {"_token": self.token, "gid": gid, "sign": sign, "t": 1, "id": "WU_FILE_0",
                 "name": "Screenshot_Wechat.png", "type": "image/png",
                 "size": len(image)}
         files = {'file': ("Screenshot_Wechat.png", image, "image/png", {})}
