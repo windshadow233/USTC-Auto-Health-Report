@@ -48,7 +48,7 @@ class USTCAutoHealthReport(object):
         msg = s.select('.alert')[0].text
         return '成功' in msg
 
-    def generate_xcm(self, phone_number, time_pos=(242, 342), phone_number_pos=(178, 283), display=False):
+    def generate_xcm(self, phone_number, time_pos=(242, 342), phone_number_pos=(178, 283), display=True):
         dir_path = os.path.dirname(os.path.abspath(__file__))
         img_pil = Image.open(os.path.join(dir_path, "xcm/blank_xcm.jpg")).convert('RGBA')
         time_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arial.ttf"), 33)
@@ -140,7 +140,7 @@ class USTCAutoHealthReport(object):
         """
         try:
             if upload_image:
-                xcm = self.generate_xcm(phone_number)
+                xcm = self.generate_xcm(phone_number, display=False)
                 status = self.upload_xcm(xcm)
                 if not status:
                     return False
