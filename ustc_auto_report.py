@@ -36,7 +36,7 @@ class USTCAutoHealthReport(object):
         获取打卡时需要提供的验证字段
         """
         response = self.sess.get(self.cas_url)
-        s = BeautifulSoup(response.text, 'lxml')
+        s = BeautifulSoup(response.text, 'html.parser')
         token = s.find(attrs={'name': '_token'}).get('value')
         return token
 
@@ -44,7 +44,7 @@ class USTCAutoHealthReport(object):
         """
         简单check一下有没有成功打卡、报备
         """
-        s = BeautifulSoup(response.text, 'lxml')
+        s = BeautifulSoup(response.text, 'html.parser')
         msg = s.select('.alert')[0].text
         return '成功' in msg
 
