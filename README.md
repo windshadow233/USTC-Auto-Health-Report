@@ -60,7 +60,7 @@ bot.login('SAxxxxxxxx', 'password')
 bot.daily_clock_in('post.json')
 # 报备
 bot.weekly_report()
-# 调整位置，预览生成的行程码
+# 调整位置与字体大小，预览生成的行程码
 bot.generate_xcm('18888888888', time_pos=(242, 342), phone_number_pos=(178, 283), display=True)
 # 进出校申请
 bot.stayinout_apply('apply.json', True, '18888888888') # 填写手机号，自动生成行程码并上传
