@@ -48,18 +48,21 @@ class USTCAutoHealthReport(object):
         msg = s.select('.alert')[0].text
         return '成功' in msg
 
-    def generate_xcm(self, phone_number, time_pos=(242, 342), phone_number_pos=(178, 283), display=True):
+    def generate_xcm(self, phone_number=None, time_pos=(220, 368), time_font_size=30,
+                     phone_number_pos=(138, 314), phone_font_size=27,
+                     arrow_size=(270, 270), arrow_pos=(155, 415),
+                     display=True):
         dir_path = os.path.dirname(os.path.abspath(__file__))
-        img_pil = Image.open(os.path.join(dir_path, "xcm/blank_xcm.jpg")).convert('RGBA')
-        time_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arial.ttf"), 33)
+        img_pil = Image.open(os.path.join(dir_path, "xcm/blank_xcm.png")).convert('RGBA')
+        time_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), time_font_size)
         draw = ImageDraw.Draw(img_pil)
         draw.text(time_pos, time.strftime("%Y.%m.%d %H:%M:%S", time.localtime(time.time() - random.randint(30, 60))), (0x94, 0x94, 0x9e), time_font)
         if phone_number:
-            mobile_number_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), 27)
+            mobile_number_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), phone_font_size)
             draw.text(phone_number_pos, f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c), mobile_number_font)
-        arrow = Image.open(os.path.join(dir_path, "xcm/gif_green", random.choice(os.listdir(os.path.join(dir_path, "xcm/gif_green")))))
+        arrow = Image.open(os.path.join(dir_path, "xcm/gif_green", random.choice(os.listdir(os.path.join(dir_path, "xcm/gif_green"))))).resize(arrow_size)
         r, g, b, a = arrow.split()
-        img_pil.paste(arrow, (180, 400), mask=a)
+        img_pil.paste(arrow, arrow_pos, mask=a)
         if display:
             img_pil.show()
         return img_pil
