@@ -27,7 +27,7 @@ class USTCAutoHealthReport(object):
         # 图片上传post url
         self.upload_image_url = 'https://weixine.ustc.edu.cn/2020img/api/upload_for_student'
         # 每日进出校申请url
-        self.stayinout_apply_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/ipost'
+        self.stayinout_apply_url = 'https://weixine.ustc.edu.cn/2020/stayinout_apply'
         # 身份认证token
         self.token = ''
 
@@ -56,11 +56,15 @@ class USTCAutoHealthReport(object):
         img_pil = Image.open(os.path.join(dir_path, "xcm/blank_xcm.png")).convert('RGBA')
         time_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), time_font_size)
         draw = ImageDraw.Draw(img_pil)
-        draw.text(time_pos, time.strftime("%Y.%m.%d %H:%M:%S", time.localtime(time.time() - random.randint(30, 60))), (0x94, 0x94, 0x9e), time_font)
+        draw.text(time_pos, time.strftime("%Y.%m.%d %H:%M:%S", time.localtime(time.time() - random.randint(30, 60))),
+                  (0x94, 0x94, 0x9e), time_font)
         if phone_number:
             mobile_number_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), phone_font_size)
-            draw.text(phone_number_pos, f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c), mobile_number_font)
-        arrow = Image.open(os.path.join(dir_path, "xcm/gif_green", random.choice(os.listdir(os.path.join(dir_path, "xcm/gif_green"))))).resize(arrow_size)
+            draw.text(phone_number_pos, f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c),
+                      mobile_number_font)
+        arrow = Image.open(os.path.join(dir_path, "xcm/gif_green",
+                                        random.choice(os.listdir(os.path.join(dir_path, "xcm/gif_green"))))).resize(
+            arrow_size)
         r, g, b, a = arrow.split()
         img_pil.paste(arrow, arrow_pos, mask=a)
         if display:
@@ -110,34 +114,11 @@ class USTCAutoHealthReport(object):
             print(e)
             return False
 
-    def weekly_report(self):
-        """
-        报备函数
-        报备成功返回1，七天内重复报备返回-1，因其他原因报备失败返回0
-        """
-        try:
-            start_date = datetime.datetime.now()
-            end_date = start_date + datetime.timedelta(days=6)
-            data = {
-                "start_date": start_date.strftime("%Y-%m-%d"),
-                "end_date": end_date.strftime("%Y-%m-%d"),
-                "_token": self.token
-            }
-            response = self.sess.post(self.report_url, data=data)
-            if not self._check_success(response):
-                if '你当前处于“在校已出校报备”状态' in response.text:
-                    return -1
-                return 0
-            return 1
-        except Exception as e:
-            print(e)
-            return 0
-
-    def stayinout_apply(self, apply_data_file, upload_image=True, phone_number=None):
+    def report(self, data_file, upload_image=True, phone_number=None):
         """
         2022年3月18日起每日进出校申请
         申请成功返回True,申请失败返回False
-        :param apply_data_file表单数据文件
+        :param data_file表单数据文件
         :param upload_image是否自动生成、上传行程码
         :param phone_number手机号(用以生成行程码中的手机号,若不提供则不生成手机号)
         """
@@ -148,12 +129,33 @@ class USTCAutoHealthReport(object):
                 if not status:
                     return False
                 time.sleep(random.randint(5, 10))
-            with open(apply_data_file, 'r') as f:
+            with open(data_file, 'r') as f:
                 post_data = json.loads(f.read())
             now = datetime.datetime.now()
             post_data['_token'] = self.token
             post_data['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
             post_data['end_date'] = now.strftime("%Y-%m-%d 23:59:59")
+            response = self.sess.post(self.report_url, data=post_data)
+            return self._check_success(response)
+        except Exception as e:
+            print(e)
+            return False
+
+    def get_teacher_id(self):
+        r = self.sess.get(self.stayinout_apply_url)
+        s = BeautifulSoup(r.text)
+        return s.select('#choose_ds option')[0].get('value')
+
+    def stayinout_apply(self, data_file):
+        try:
+            with open(data_file, 'r') as f:
+                post_data = json.loads(f.read())
+            now = datetime.datetime.now()
+            teacher_id = self.get_teacher_id()
+            post_data["_token"] = self.token
+            post_data["choose_ds"] = teacher_id
+            post_data["start_date"] = now.strftime("%Y-%m-%d %H:%M:%S"),
+            post_data["end_date"] = now.strftime("%Y-%m-%d 23:59:59"),
             response = self.sess.post(self.stayinout_apply_url, data=post_data)
             return self._check_success(response)
         except Exception as e:

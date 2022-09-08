@@ -1,4 +1,9 @@
 {
   "t": "3",
-  "return_college[]": ["东校区", "西校区", "南校区", "北校区", "中校区"]
+  "reason": "去实验室",
+  "return_college[]": ["东校区", "西校区", "中校区"],
+  "start_day": "1",
+  "files_akm": "系统同步",
+  "files_hs": "系统同步",
+  "files_xck": "系统同步"
 }
