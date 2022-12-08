@@ -80,7 +80,6 @@ class USTCAutoHealthReport(object):
             post_data['_token'] = self.token
             post_data['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
             post_data['end_date'] = now.strftime("%Y-%m-%d 23:59:59")
-            post_data['comment'] = ''
             response = self.sess.post(self.report_url, data=post_data)
             return self._check_success(response)
         except Exception as e:
