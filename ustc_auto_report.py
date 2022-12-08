@@ -54,7 +54,7 @@ class USTCAutoHealthReport(object):
 
     def daily_clock_in(self, post_data_file):
         """
-        打卡函数，需要提供包含表单内容的json文件
+        打卡函数，需要提供包含表单内容的json文件（示例见post.json）
         打卡成功返回True，打卡失败返回False
         """
         try:
@@ -69,7 +69,7 @@ class USTCAutoHealthReport(object):
 
     def report(self, data_file):
         """
-        2022年3月18日起每日进出校申请
+        出入校报备，需要提供包含表单内容的json文件（示例见report.json）
         申请成功返回True,申请失败返回False
         :param data_file表单数据文件
         """
