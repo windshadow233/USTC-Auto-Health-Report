@@ -10,9 +10,7 @@
     - [ ] 验证码识别（能绕过为什么要识别？）
     
 - [x] 健康打卡
-- [x] 出校报备
 - [x] 进出校报备
-- [x] 进出校申请
 
 本项目仅供学习使用，请勿过分依赖。开发者对使用本脚本造成的问题不负任何责任，不对脚本执行效果做出任何担保，原则上不提供任何形式的技术支持。
 
@@ -33,11 +31,7 @@ python==3.6
 
 ## 进出校报备
 
-每天调用一次，不需要经过老师审核。（目前该功能暂时不可用，替换为下面的进出校申请）
-
-## 进出校申请
-
-每天调用一次，需要经过老师审核。
+每天调用一次，不需要经过老师审核。
 
 ## 调用示例:
 
@@ -49,12 +43,6 @@ bot = USTCAutoHealthReport()
 bot.login('SAxxxxxxxx', 'password')
 # 打卡
 bot.daily_clock_in('post.json')
-# 调整位置与字体大小，预览生成的行程码
-bot.generate_xcm('18888888888', time_pos=(242, 342), phone_number_pos=(178, 283), display=True)
 # 进出校报备
-bot.report('report.json', True, '18888888888')  # 填写手机号，自动生成行程码并上传
-bot.report('report.json', True)  # 不填手机号，只在行程码的时间位置生成时间字符串
-bot.report('report.json', False)  # 不生成、也不上传行程码
-# 进出校申请
-bot.stayinout_apply('apply.json')
+bot.report('report.json')
 ```

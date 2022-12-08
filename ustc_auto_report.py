@@ -1,12 +1,6 @@
 import json
 from bs4 import BeautifulSoup
 import datetime
-import time
-from PIL import ImageFont, Image, ImageDraw
-import os
-import random
-import re
-import io
 
 from ustc_passport_login import USTCPassportLogin
 
@@ -48,47 +42,6 @@ class USTCAutoHealthReport(object):
         msg = s.select('.alert')[0].text
         return '成功' in msg
 
-    def generate_xcm(self, phone_number=None, time_pos=(220, 368), time_font_size=30,
-                     phone_number_pos=(138, 314), phone_font_size=27,
-                     arrow_size=(270, 270), arrow_pos=(155, 415),
-                     display=True):
-        dir_path = os.path.dirname(os.path.abspath(__file__))
-        img_pil = Image.open(os.path.join(dir_path, "xcm/blank_xcm.png")).convert('RGBA')
-        time_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), time_font_size)
-        draw = ImageDraw.Draw(img_pil)
-        draw.text(time_pos, time.strftime("%Y.%m.%d %H:%M:%S", time.localtime(time.time() - random.randint(30, 60))),
-                  (0x94, 0x94, 0x9e), time_font)
-        if phone_number:
-            mobile_number_font = ImageFont.truetype(os.path.join(dir_path, "xcm/fonts/arialbd.ttf"), phone_font_size)
-            draw.text(phone_number_pos, f'{phone_number[:3]}****{phone_number[-4:]}', (0x46, 0x46, 0x4c),
-                      mobile_number_font)
-        arrow = Image.open(os.path.join(dir_path, "xcm/gif_green",
-                                        random.choice(os.listdir(os.path.join(dir_path, "xcm/gif_green"))))).resize(
-            arrow_size)
-        r, g, b, a = arrow.split()
-        img_pil.paste(arrow, arrow_pos, mask=a)
-        if display:
-            img_pil.show()
-        return img_pil
-
-    def _get_gid_sign(self):
-        r = self.sess.get(self.upload_url)
-        gid = re.search("'gid': '(.*)'", r.text).groups()[0]
-        sign = re.search("'sign': '(.*)'", r.text).groups()[0]
-        return gid, sign
-
-    def upload_xcm(self, image):
-        gid, sign = self._get_gid_sign()
-        output = io.BytesIO()
-        image.save(output, format='PNG')
-        image = output.getvalue()
-        data = {"_token": self.token, "gid": gid, "sign": sign, "t": 1, "id": "WU_FILE_0",
-                "name": "Screenshot_Wechat.png", "type": "image/png",
-                "size": len(image)}
-        files = {'file': ("Screenshot_Wechat.png", image, "image/png", {})}
-        r = self.sess.post(self.upload_image_url, data=data, files=files)
-        return r.json()['status']
-
     def login(self, username, password):
         """
         登录,需要提供用户名、密码
@@ -114,49 +67,21 @@ class USTCAutoHealthReport(object):
             print(e)
             return False
 
-    def report(self, data_file, upload_image=True, phone_number=None):
+    def report(self, data_file):
         """
         2022年3月18日起每日进出校申请
         申请成功返回True,申请失败返回False
         :param data_file表单数据文件
-        :param upload_image是否自动生成、上传行程码
-        :param phone_number手机号(用以生成行程码中的手机号,若不提供则不生成手机号)
         """
         try:
-            if upload_image:
-                xcm = self.generate_xcm(phone_number, display=False)
-                status = self.upload_xcm(xcm)
-                if not status:
-                    return False
-                time.sleep(random.randint(5, 10))
             with open(data_file, 'r') as f:
                 post_data = json.loads(f.read())
             now = datetime.datetime.now()
             post_data['_token'] = self.token
             post_data['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
             post_data['end_date'] = now.strftime("%Y-%m-%d 23:59:59")
+            post_data['comment'] = ''
             response = self.sess.post(self.report_url, data=post_data)
-            return self._check_success(response)
-        except Exception as e:
-            print(e)
-            return False
-
-    def get_teacher_id(self):
-        r = self.sess.get(self.stayinout_apply_url)
-        s = BeautifulSoup(r.text)
-        return s.select('#choose_ds option')[0].get('value')
-
-    def stayinout_apply(self, data_file):
-        try:
-            with open(data_file, 'r') as f:
-                post_data = json.loads(f.read())
-            now = datetime.datetime.now()
-            teacher_id = self.get_teacher_id()
-            post_data["_token"] = self.token
-            post_data["choose_ds"] = teacher_id
-            post_data["start_date"] = now.strftime("%Y-%m-%d %H:%M:%S"),
-            post_data["end_date"] = now.strftime("%Y-%m-%d 23:59:59"),
-            response = self.sess.post(self.stayinout_apply_url, data=post_data)
             return self._check_success(response)
         except Exception as e:
             print(e)
