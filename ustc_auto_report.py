@@ -14,7 +14,7 @@ class USTCAutoHealthReport(object):
         self.cas_url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
         # 打卡url
         self.clock_in_url = 'https://weixine.ustc.edu.cn/2020/daliy_report'
-        # 每周报备url
+        # 每日报备url
         self.report_url = 'https://weixine.ustc.edu.cn/2020/apply/daliy/ipost'
         # 身份认证token
         self.token = ''
